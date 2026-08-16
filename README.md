@@ -27,8 +27,8 @@ The architecture is meticulously engineered against the **AWS Well-Architected F
 | **Phase 1** | **Local Application** | React SPA + Express API + PostgreSQL + Prisma ORM | `✅ Complete` |
 | **Phase 2** | **Containerization** | Multi-Container Docker Stack, Healthchecks, Volumes | `✅ Complete` |
 | **Phase 3** | **AWS VPC & Networking** | Custom VPC (10.0.0.0/16), Multi-AZ Subnets, IGW, Route Tables | `✅ Complete` |
-| **Phase 4** | **IAM & Security Groups** | Least-Privilege Security Group Chaining & IAM Roles | `⏳ In Progress` |
-| **Phase 5** | **Compute (EC2)** | Single-node Dockerized API Deployment & Validation | `⏳ Planned` |
+| **Phase 4** | **IAM & Security Groups** | Least-Privilege Security Group Chaining & IAM Roles | `✅ Complete` |
+| **Phase 5** | **Compute (EC2)** | Single-node Dockerized API Deployment & Validation | `⏳ In Progress` |
 | **Phase 6** | **Database (RDS)** | Managed PostgreSQL in Private Subnets (Isolated) | `⏳ Planned` |
 | **Phase 7** | **Load Balancing (ALB)** | Multi-AZ Application Load Balancer with Health Checks | `⏳ Planned` |
 | **Phase 8** | **High Availability & ASG** | Auto Scaling Group with Target Tracking Policies | `⏳ Planned` |
@@ -125,16 +125,28 @@ The networking foundation is provisioned in AWS with multi-AZ fault tolerance an
 
 ---
 
-## 🛡️ Security Architecture & Least-Privilege Design
+## 🛡️ Phase 4 Implemented Security Specifications & Least-Privilege Design
 
 - 🔒 **Strict Security Group Chaining (Zero Open Internal Ports):**
-  - **ALB Security Group:** Accepts HTTP (80) / HTTPS (443) from `0.0.0.0/0`.
-  - **EC2 Security Group:** Port `5000` is strictly restricted to traffic originating **ONLY** from the ALB Security Group ID. Direct internet access to compute nodes is completely blocked.
-  - **RDS Security Group:** PostgreSQL Port `5432` is restricted to traffic originating **ONLY** from the EC2 Security Group ID.
+  - **`cloudtask-alb-sg`:** Accepts HTTP (`80`) from `0.0.0.0/0`.
+  - **`cloudtask-ec2-sg`:** Port `5000` is strictly restricted to traffic originating **ONLY** from the ALB Security Group ID (`cloudtask-alb-sg`). Direct internet access to compute nodes is completely blocked.
+  - **`cloudtask-rds-sg`:** PostgreSQL Port `5432` is restricted to traffic originating **ONLY** from the EC2 Security Group ID (`cloudtask-ec2-sg`).
 - 🧱 **Database Isolation:** Amazon RDS PostgreSQL resides strictly within isolated **Private Subnets** with `Publicly Accessible = false`.
-- 🔑 **Keyless AWS OIDC Authentication:** GitHub Actions assumes temporary IAM roles via OpenID Connect (OIDC). No long-lived static AWS access keys (`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`) are stored in GitHub Secrets.
+- 🔑 **IAM Roles over Static Keys:** EC2 instances assume the `CloudTaskEC2Role` (Instance Profile) to fetch temporary credentials via AWS STS. No static AWS keys are injected into instances or `.env` files.
 - 🗄️ **Zero Hardcoded Secrets:** Application secrets (JWT Secret, Database Credentials) are fetched securely from **AWS SSM Parameter Store** (`SecureString`).
-- 🛡️ **Application Layer Hardening:** Password hashing using `bcryptjs` (salt rounds: 10), stateless authentication using `JWT`, input validation using `Zod`, and sanitized database queries using `Prisma ORM` (SQL injection immune).
+
+<details>
+<summary><b>📸 Click to view AWS Console Proof of Work (Phase 4 Screenshots)</b></summary>
+
+| ALB Security Group (`cloudtask-alb-sg`) | EC2 Security Group (`cloudtask-ec2-sg`) |
+| :---: | :---: |
+| ![ALB SG](docs/screenshots/phase-4-alb-sg.png) | ![EC2 SG](docs/screenshots/phase-4-ec2-sg.png) |
+
+| RDS Security Group (`cloudtask-rds-sg`) | IAM Role (`CloudTaskEC2Role`) |
+| :---: | :---: |
+| ![RDS SG](docs/screenshots/phase-4-rds-sg.png) | ![IAM Role](docs/screenshots/phase-4-iam-role.png) |
+
+</details>
 
 ---
 
@@ -226,7 +238,8 @@ aws-production-deployment/
 │   ├── decisions/                 # Architectural Decision Records (ADRs)
 │   │   ├── 001-project-architecture.md
 │   │   ├── 002-containerization.md
-│   │   └── 003-vpc-network-architecture.md
+│   │   ├── 003-vpc-network-architecture.md
+│   │   └── 004-security-group-chaining.md
 │   └── screenshots/               # Proof of Work & AWS Console validation
 ├── infrastructure/
 │   └── terraform/
@@ -249,9 +262,10 @@ aws-production-deployment/
 
 Key architectural and operational decisions are documented to maintain transparent engineering rationale:
 
-- 📑 **[ADR 001: Initial Multi-Tier Architecture & Tech Stack Selection](file:///c:/Free_lancing/Cloud%20Engineering%20Learning/aws-production-deployment/docs/decisions/001-project-architecture.md)**
-- 📑 **[ADR 002: Containerization Strategy with Docker Compose](file:///c:/Free_lancing/Cloud%20Engineering%20Learning/aws-production-deployment/docs/decisions/002-containerization.md)**
-- 📑 **[ADR 003: Multi-AZ Custom VPC Network Architecture](file:///c:/Free_lancing/Cloud%20Engineering%20Learning/aws-production-deployment/docs/decisions/003-vpc-network-architecture.md)**
+- 📑 [ADR 001: Initial Multi-Tier Architecture & Tech Stack Selection](docs/decisions/001-project-architecture.md)
+- 📑 [ADR 002: Containerization Strategy with Docker Compose](docs/decisions/002-containerization.md)
+- 📑 [ADR 003: Multi-AZ Custom VPC Network Architecture](docs/decisions/003-vpc-network-architecture.md)
+- 📑 [ADR 004: Least-Privilege Security Group Chaining & IAM Roles](docs/decisions/004-security-group-chaining.md)
 
 ---
 
