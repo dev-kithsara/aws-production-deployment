@@ -1,0 +1,65 @@
+services:
+  # ==========================================
+  # 1. Database Tier (PostgreSQL)
+  # ==========================================
+  postgres:
+    image: postgres:17-alpine
+    container_name: cloudtask-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cloudtask_db
+      POSTGRES_USER: cloudtask
+      POSTGRES_PASSWORD: cloudtask_dev_password
+    ports:
+      - "5434:5432" # Host: 5434 -> Container: 5432 (Local 5433 සමඟ ගැටුම් වැළැක්වීමට)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudtask -d cloudtask_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================
+  # 2. Backend API Tier (Node.js Express)
+  # ==========================================
+  backend:
+    build:
+      context: ./app/backend
+      dockerfile: Dockerfile
+    container_name: cloudtask-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      # Container networking: Service name 'postgres' භාවිත කර connection එක හදයි
+      DATABASE_URL: "postgresql://cloudtask:cloudtask_dev_password@postgres:5432/cloudtask_db?schema=public"
+      JWT_SECRET: "docker-local-jwt-development-secret-key-2026"
+      CLIENT_URL: "http://localhost:5173"
+    depends_on:
+      postgres:
+        condition: service_healthy # DB එක fully ready වන තෙක් backend start නොවේ
+
+  # ==========================================
+  # 3. Frontend UI Tier (React / Vite)
+  # ==========================================
+  frontend:
+    build:
+      context: ./app/frontend
+      dockerfile: Dockerfile
+    container_name: cloudtask-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
+
+# ==========================================
+# Named Volumes for Data Persistence
+# ==========================================
+volumes:
+  postgres_data:
+    driver: local
