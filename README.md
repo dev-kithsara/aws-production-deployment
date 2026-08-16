@@ -114,13 +114,13 @@ The architecture is meticulously engineered against the **AWS Well-Architected F
 
 Engineered to showcase enterprise cloud best practices while remaining **100% Free-Tier compliant**:
 
-| Component / Layer | Production-Scale Architecture | Portfolio Cost-Optimized Choice | Monthly Est. Cost |
-| :--- | :--- | :--- | :--- |
-| **Compute** | Multiple Large EC2s / EKS Cluster | Auto Scaling `t2.micro` / `t3.micro` | **$0.00** (Free Tier) |
-| **Database** | Multi-AZ RDS Aurora PostgreSQL | Single-AZ `db.t3.micro` / `db.t4g.micro` | **$0.00** (Free Tier) |
-| **Networking** | NAT Gateways ($32+/mo each) | Public Subnet Direct Routing (No NAT GW) | **$0.00** |
-| **Secrets Management** | AWS Secrets Manager ($0.40/secret) | AWS SSM Parameter Store (Standard) | **$0.00** |
-| **Infrastructure Lifecycle**| 24/7 Running Stack | Automated Provision & Teardown via Terraform | **$0.00** |
+| Component / Layer            | Production-Scale Architecture      | Portfolio Cost-Optimized Choice              | Monthly Est. Cost     |
+| :--------------------------- | :--------------------------------- | :------------------------------------------- | :-------------------- |
+| **Compute**                  | Multiple Large EC2s / EKS Cluster  | Auto Scaling `t2.micro` / `t3.micro`         | **$0.00** (Free Tier) |
+| **Database**                 | Multi-AZ RDS Aurora PostgreSQL     | Single-AZ `db.t3.micro` / `db.t4g.micro`     | **$0.00** (Free Tier) |
+| **Networking**               | NAT Gateways ($32+/mo each)        | Public Subnet Direct Routing (No NAT GW)     | **$0.00**             |
+| **Secrets Management**       | AWS Secrets Manager ($0.40/secret) | AWS SSM Parameter Store (Standard)           | **$0.00**             |
+| **Infrastructure Lifecycle** | 24/7 Running Stack                 | Automated Provision & Teardown via Terraform | **$0.00**             |
 
 ---
 
@@ -179,17 +179,20 @@ aws-production-deployment/
 ## 🛠️ Local Development & Quick Start
 
 ### Prerequisites
+
 - [Docker Desktop](https://www.docker.com/)
 - [Node.js (v20+)](https://nodejs.org/) & `npm`
 - [PostgreSQL](https://www.postgresql.org/) (or use Docker container)
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/<YOUR_USERNAME>/aws-production-deployment.git
 cd aws-production-deployment
 ```
 
 ### 2. Run Backend Locally
+
 ```bash
 cd app/backend
 npm install
@@ -197,15 +200,18 @@ npx prisma generate
 npx prisma migrate dev --name init
 npm run dev
 ```
-*Backend runs on: `http://localhost:5000` (Health Check: `http://localhost:5000/api/health`)*
+
+_Backend runs on: `http://localhost:5000` (Health Check: `http://localhost:5000/api/health`)_
 
 ### 3. Run Frontend Locally
+
 ```bash
 cd ../frontend
 npm install
 npm run dev
 ```
-*Frontend UI runs on: `http://localhost:5173`*
+
+_Frontend UI runs on: `http://localhost:5173`_
 
 ---
 
@@ -233,11 +239,11 @@ terraform destroy -auto-approve
 
 ## 🧪 Resiliency & Chaos Testing Scenarios
 
-| Test Case | Simulated Failure | Expected System Behavior | Observed Outcome | Evidence |
-| :--- | :--- | :--- | :--- | :--- |
-| **Node Failure** | Manually terminated 1 EC2 in ASG | ALB detects failure, ASG automatically provisions new node | Zero client downtime; new node joined ALB target within 90s | `docs/screenshots/asg-healing.png` |
-| **App Health Failure**| Terminated Express process on Node A | ALB health check fails (`/api/health`), reroutes 100% traffic to Node B | Continuous 200 OK responses on client sessions | `docs/screenshots/healthcheck-failover.png` |
-| **Traffic Spike** | Generated synthetic HTTP load on ALB | CPU spike triggers CloudWatch Alarm & ASG Scale-out policy | Auto-scaled from 2 to 4 nodes dynamically | `docs/screenshots/cloudwatch-scaleout.png` |
+| Test Case              | Simulated Failure                    | Expected System Behavior                                                | Observed Outcome                                            | Evidence                                    |
+| :--------------------- | :----------------------------------- | :---------------------------------------------------------------------- | :---------------------------------------------------------- | :------------------------------------------ |
+| **Node Failure**       | Manually terminated 1 EC2 in ASG     | ALB detects failure, ASG automatically provisions new node              | Zero client downtime; new node joined ALB target within 90s | `docs/screenshots/asg-healing.png`          |
+| **App Health Failure** | Terminated Express process on Node A | ALB health check fails (`/api/health`), reroutes 100% traffic to Node B | Continuous 200 OK responses on client sessions              | `docs/screenshots/healthcheck-failover.png` |
+| **Traffic Spike**      | Generated synthetic HTTP load on ALB | CPU spike triggers CloudWatch Alarm & ASG Scale-out policy              | Auto-scaled from 2 to 4 nodes dynamically                   | `docs/screenshots/cloudwatch-scaleout.png`  |
 
 ---
 
@@ -254,7 +260,7 @@ terraform destroy -auto-approve
 ## 👤 Author
 
 **Kithsara**  
-*Cloud & DevOps Engineer*
+_Cloud & DevOps Engineer_
 
 - 🌐 **GitHub:** [@dev-kithsara](https://github.com/dev-kithsara)
-- 💼 **LinkedIn:** [linkedin.com/in/kithsara](https://www.linkedin.com/in/)
+- 💼 **LinkedIn:** https://www.linkedin/kithsara-silva
