@@ -13,32 +13,32 @@
 
 ## 📌 Executive Summary
 
-**CloudTask** is an enterprise-grade, highly available, secure **3-Tier Web Application** designed and deployed on AWS. This repository demonstrates production-level **Cloud Architecture**, **Infrastructure as Code (IaC)** with Terraform, **Containerization** with Docker, and automated **GitOps CI/CD** using GitHub Actions with keyless **AWS OIDC (OpenID Connect)** authentication.
+**CloudTask** is an enterprise-grade, highly available, secure **3-Tier Web Application** designed and deployed on AWS. This repository showcases production-level **Cloud Architecture**, **Infrastructure as Code (IaC)** with Terraform, **Containerization** with Docker, and automated **GitOps CI/CD** using GitHub Actions with keyless **AWS OIDC (OpenID Connect)** authentication.
 
-The architecture is engineered against the **AWS Well-Architected Framework** (Security, Reliability, Operational Excellence, Performance Efficiency, Cost Optimization) with a strict **$0 Free-Tier-First Cost Protection Plan**.
+The architecture is meticulously engineered against the **AWS Well-Architected Framework** (Security, Reliability, Operational Excellence, Performance Efficiency, and Cost Optimization) with a strict **$0 Free-Tier-First Cost Protection Plan**.
 
 ---
 
 ## 🚦 Project Implementation Roadmap
 
-| Phase        | Milestone                    | Focus Area                                                    | Status           |
-| :----------- | :--------------------------- | :------------------------------------------------------------ | :--------------- |
-| **Phase 0**  | **Project Foundation**       | GitHub Repo, Standards, Multi-Tier Directory Layout           | `✅ Complete`    |
-| **Phase 1**  | **Local Application**        | React SPA + Express API + PostgreSQL + Prisma ORM             | `✅ Complete`    |
-| **Phase 2**  | **Containerization**         | Multi-Container Docker Stack, Healthchecks, Volumes           | `✅ Complete`    |
-| **Phase 3**  | **AWS VPC & Networking**     | Custom VPC (10.0.0.0/16), Multi-AZ Subnets, IGW, Route Tables | `✅ Complete`    |
-| **Phase 4**  | **IAM & Security Groups**    | Least-Privilege Security Group Chaining & IAM Roles           | `⏳ In Progress` |
-| **Phase 5**  | **Compute (EC2)**            | Single-node Dockerized API Deployment & Validation            | `⏳ Planned`     |
-| **Phase 6**  | **Database (RDS)**           | Managed PostgreSQL in Private Subnets (Isolated)              | `⏳ Planned`     |
-| **Phase 7**  | **Load Balancing (ALB)**     | Multi-AZ Application Load Balancer with Health Checks         | `⏳ Planned`     |
-| **Phase 8**  | **High Availability & ASG**  | Auto Scaling Group with Target Tracking Policies              | `⏳ Planned`     |
-| **Phase 9**  | **Object Storage (S3)**      | Decoupled Static Asset Storage & IAM Policies                 | `⏳ Planned`     |
-| **Phase 10** | **Observability**            | CloudWatch Metrics, Alarms, Logs & Health Monitoring          | `⏳ Planned`     |
-| **Phase 11** | **Automated CI/CD**          | GitHub Actions Pipeline with Keyless AWS OIDC Auth            | `⏳ Planned`     |
-| **Phase 12** | **IaC with Terraform**       | Modular Infrastructure as Code (Build / Teardown)             | `⏳ Planned`     |
-| **Phase 13** | **Security Hardening**       | SSM Parameter Store Secrets & Encryption at Rest              | `⏳ Planned`     |
-| **Phase 14** | **Well-Architected Review**  | Comprehensive 6-Pillars Workload Assessment                   | `⏳ Planned`     |
-| **Phase 15** | **Resiliency & Chaos Tests** | Node Kill, Health Failover & Traffic Spike Tests              | `⏳ Planned`     |
+| Phase | Milestone | Focus Area | Status |
+| :--- | :--- | :--- | :--- |
+| **Phase 0** | **Project Foundation** | GitHub Repo, Standards, Multi-Tier Directory Layout | `✅ Complete` |
+| **Phase 1** | **Local Application** | React SPA + Express API + PostgreSQL + Prisma ORM | `✅ Complete` |
+| **Phase 2** | **Containerization** | Multi-Container Docker Stack, Healthchecks, Volumes | `✅ Complete` |
+| **Phase 3** | **AWS VPC & Networking** | Custom VPC (10.0.0.0/16), Multi-AZ Subnets, IGW, Route Tables | `✅ Complete` |
+| **Phase 4** | **IAM & Security Groups** | Least-Privilege Security Group Chaining & IAM Roles | `⏳ In Progress` |
+| **Phase 5** | **Compute (EC2)** | Single-node Dockerized API Deployment & Validation | `⏳ Planned` |
+| **Phase 6** | **Database (RDS)** | Managed PostgreSQL in Private Subnets (Isolated) | `⏳ Planned` |
+| **Phase 7** | **Load Balancing (ALB)** | Multi-AZ Application Load Balancer with Health Checks | `⏳ Planned` |
+| **Phase 8** | **High Availability & ASG** | Auto Scaling Group with Target Tracking Policies | `⏳ Planned` |
+| **Phase 9** | **Object Storage (S3)** | Decoupled Static Asset Storage & IAM Policies | `⏳ Planned` |
+| **Phase 10** | **Observability** | CloudWatch Metrics, Alarms, Logs & Health Monitoring | `⏳ Planned` |
+| **Phase 11** | **Automated CI/CD** | GitHub Actions Pipeline with Keyless AWS OIDC Auth | `⏳ Planned` |
+| **Phase 12** | **IaC with Terraform** | Modular Infrastructure as Code (Build / Teardown) | `⏳ Planned` |
+| **Phase 13** | **Security Hardening** | SSM Parameter Store Secrets & Encryption at Rest | `⏳ Planned` |
+| **Phase 14** | **Well-Architected Review** | Comprehensive 6-Pillars Workload Assessment | `⏳ Planned` |
+| **Phase 15** | **Resiliency & Chaos Tests** | Node Kill, Health Failover & Traffic Spike Tests | `⏳ Planned` |
 
 ---
 
@@ -88,36 +88,108 @@ The architecture is engineered against the **AWS Well-Architected Framework** (S
                     └─────────────────────────────┘
 
 ┌─────────────────┐     ┌───────────────────────┐     ┌───────────────────────┐
-│   Amazon S3     │     │ AWS Systems Manager   │     │   Amazon CloudWatch   │
+│   Amazon S3     │     │  AWS Systems Manager  │     │   Amazon CloudWatch   │
 │ (Static Assets) │     │ (SSM Parameter Store) │     │(Logs, Metrics, Alarms)│
 └─────────────────┘     └───────────────────────┘     └───────────────────────┘
+```
 
+---
 
-🌐 Phase 3 Implemented Network SpecificationsThe networking foundation is provisioned in AWS with multi-AZ fault tolerance and strict routing isolation:Resource NameTypeCIDR / TargetAvailability ZoneRouting Scope / Targetcloudtask-vpcVPC10.0.0.0/16Multi-AZLocal Virtual Networkcloudtask-igwInternet GatewayN/AVPC-attachedOutbound/Inbound Public Gatewaycloudtask-public-aPublic Subnet10.0.1.0/24AZ-aRouted to cloudtask-igw (0.0.0.0/0)cloudtask-public-bPublic Subnet10.0.2.0/24AZ-bRouted to cloudtask-igw (0.0.0.0/0)cloudtask-private-aPrivate Subnet10.0.11.0/24AZ-aIsolated (Local route only)cloudtask-private-bPrivate Subnet10.0.12.0/24AZ-bIsolated (Local route only)cloudtask-public-rtRoute Table0.0.0.0/0 ➔ IGWMulti-AZAssociated with Public Subnets A & Bcloudtask-private-rtRoute Table10.0.0.0/16 ➔ localMulti-AZAssociated with Private Subnets A & B🛡️ Security Architecture & Least-Privilege Design🔒 Security Group Chaining (Zero Open Internal Ports):ALB Security Group: Accepts HTTP (80) / HTTPS (443) from 0.0.0.0/0.EC2 Security Group: Port 5000 is strictly restricted to traffic originating ONLY from the ALB Security Group ID. Direct internet access to compute nodes is completely blocked.RDS Security Group: PostgreSQL Port 5432 is restricted to traffic originating ONLY from the EC2 Security Group ID.🧱 Database Isolation: Amazon RDS PostgreSQL resides strictly within isolated Private Subnets with Publicly Accessible = false.🔑 Keyless AWS OIDC Authentication: GitHub Actions assumes temporary IAM roles via OpenID Connect (OIDC). No long-lived static AWS access keys (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY) are stored in GitHub Secrets.🗄️ Zero Hardcoded Secrets: Application secrets (JWT Secret, Database Credentials) are fetched securely from AWS SSM Parameter Store (SecureString).🛡️ Application Layer Hardening: Password hashing using bcryptjs (salt rounds: 10), stateless authentication using JWT, input validation using Zod, and sanitized database queries using Prisma ORM (SQL injection immune).💰 Cost Optimization & Free-Tier EngineeringEngineered to showcase enterprise cloud best practices while remaining 100% Free-Tier compliant:Component / LayerProduction ArchitecturePortfolio Cost-Optimized SolutionMonthly Est. CostNetworkingNAT Gateways ($32+/mo each)Public Subnet direct routing (No NAT Gateway)$0.00DatabaseMulti-AZ RDS Aurora PostgreSQLSingle-AZ db.t3.micro / db.t4g.micro (20GB storage)$0.00 (Free Tier)ComputeMultiple Large EC2s / EKS ClusterAuto Scaling t2.micro / t3.micro instances$0.00 (Free Tier)Secrets ManagementAWS Secrets Manager ($0.40/secret)AWS SSM Parameter Store (Standard Tier)$0.00Lifecycle Policy24/7 Running WorkloadsAutomated Provision & Teardown via Terraform$0.00🛠️ Local Multi-Container Development (Docker Compose)The entire full-stack multi-tier application is fully containerized and orchestratable locally with healthcheck synchronizations.PrerequisitesDocker Desktop installed and runningGit
+## 🌐 Phase 3 Implemented Network Specifications
 
-1. Start the Complete Stack
-Bash
+The networking foundation is provisioned in AWS with multi-AZ fault tolerance and strict routing isolation:
+
+| Resource Name | Resource Type | CIDR / Target | Availability Zone | Routing Scope / Target |
+| :--- | :--- | :--- | :--- | :--- |
+| **`cloudtask-vpc`** | Custom VPC | `10.0.0.0/16` | Multi-AZ | Local Virtual Network |
+| **`cloudtask-igw`** | Internet Gateway | N/A | VPC-attached | Outbound/Inbound Public Gateway |
+| **`cloudtask-public-a`** | Public Subnet | `10.0.1.0/24` | `AZ-a` (us-east-1a) | Routed to `cloudtask-igw` (`0.0.0.0/0`) |
+| **`cloudtask-public-b`** | Public Subnet | `10.0.2.0/24` | `AZ-b` (us-east-1b) | Routed to `cloudtask-igw` (`0.0.0.0/0`) |
+| **`cloudtask-private-a`** | Private Subnet | `10.0.11.0/24` | `AZ-a` (us-east-1a) | Isolated (Local route only) |
+| **`cloudtask-private-b`** | Private Subnet | `10.0.12.0/24` | `AZ-b` (us-east-1b) | Isolated (Local route only) |
+| **`cloudtask-public-rt`** | Public Route Table | `0.0.0.0/0 ➔ IGW` | Multi-AZ | Associated with Public Subnets A & B |
+| **`cloudtask-private-rt`** | Private Route Table | `10.0.0.0/16 ➔ local` | Multi-AZ | Associated with Private Subnets A & B |
+
+<details>
+<summary><b>📸 Click to view AWS Console Proof of Work (Phase 3 Screenshots)</b></summary>
+
+| AWS VPC Setup | Subnets & CIDRs |
+| :---: | :---: |
+| ![VPC Details](docs/screenshots/cloudtask-vpc%20details.png) | ![Subnets Configuration](docs/screenshots/Four%20Subnets%20with%20AZ%20and%20%20CIDR%20.png) |
+
+| Public Route Table Associations | Private Route Table Associations |
+| :---: | :---: |
+| ![Public RT](docs/screenshots/cloudtask-public-rt%20%20Routes%20and%20Subnet%20Associations.png) | ![Private RT](docs/screenshots/cloudtask-private-rt%20Routes%20and%20Subnet%20Associations.png) |
+
+</details>
+
+---
+
+## 🛡️ Security Architecture & Least-Privilege Design
+
+- 🔒 **Strict Security Group Chaining (Zero Open Internal Ports):**
+  - **ALB Security Group:** Accepts HTTP (80) / HTTPS (443) from `0.0.0.0/0`.
+  - **EC2 Security Group:** Port `5000` is strictly restricted to traffic originating **ONLY** from the ALB Security Group ID. Direct internet access to compute nodes is completely blocked.
+  - **RDS Security Group:** PostgreSQL Port `5432` is restricted to traffic originating **ONLY** from the EC2 Security Group ID.
+- 🧱 **Database Isolation:** Amazon RDS PostgreSQL resides strictly within isolated **Private Subnets** with `Publicly Accessible = false`.
+- 🔑 **Keyless AWS OIDC Authentication:** GitHub Actions assumes temporary IAM roles via OpenID Connect (OIDC). No long-lived static AWS access keys (`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`) are stored in GitHub Secrets.
+- 🗄️ **Zero Hardcoded Secrets:** Application secrets (JWT Secret, Database Credentials) are fetched securely from **AWS SSM Parameter Store** (`SecureString`).
+- 🛡️ **Application Layer Hardening:** Password hashing using `bcryptjs` (salt rounds: 10), stateless authentication using `JWT`, input validation using `Zod`, and sanitized database queries using `Prisma ORM` (SQL injection immune).
+
+---
+
+## 💰 Cost Optimization & Free-Tier Engineering
+
+Engineered to showcase enterprise cloud best practices while remaining **100% Free-Tier compliant**:
+
+| Component / Layer | Production Architecture | Portfolio Cost-Optimized Solution | Monthly Est. Cost |
+| :--- | :--- | :--- | :--- |
+| **Networking** | NAT Gateways ($32+/mo each) | Public Subnet direct routing (No NAT Gateway) | **$0.00** |
+| **Database** | Multi-AZ RDS Aurora PostgreSQL | Single-AZ `db.t3.micro` / `db.t4g.micro` (20GB storage) | **$0.00** (Free Tier) |
+| **Compute** | Multiple Large EC2s / EKS Cluster | Auto Scaling `t2.micro` / `t3.micro` instances | **$0.00** (Free Tier) |
+| **Secrets Management** | AWS Secrets Manager ($0.40/secret) | AWS SSM Parameter Store (Standard Tier) | **$0.00** |
+| **Lifecycle Policy** | 24/7 Running Workloads | Automated Provision & Teardown via Terraform | **$0.00** |
+
+---
+
+## 🛠️ Local Multi-Container Development (Docker Compose)
+
+The entire full-stack multi-tier application is containerized and orchestratable locally with healthcheck synchronization.
+
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/) installed and running
+- [Git](https://git-scm.com/)
+
+### 1. Start the Complete Stack
+```bash
 # Clone the repository
-git clone [https://github.com/dev-kithsara/aws-production-deployment.git](https://github.com/dev-kithsara/aws-production-deployment.git)
+git clone https://github.com/dev-kithsara/aws-production-deployment.git
 cd aws-production-deployment
 
 # Build images and start multi-container stack in detached mode
 docker compose up --build -d
-2. Apply Database Migrations inside Container
-Bash
+```
+
+### 2. Apply Database Migrations inside Container
+```bash
 docker compose exec backend npx prisma migrate deploy
-3. Access Application Services
-Frontend SPA: http://localhost:5173
+```
 
-Backend API: http://localhost:5000
+### 3. Access Application Services
+- 🌐 **Frontend SPA:** [http://localhost:5173](http://localhost:5173)
+- ⚙️ **Backend API:** [http://localhost:5000](http://localhost:5000)
+- ❤️ **API Health Check:** [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
-API Health Check: http://localhost:5000/api/health
-
-4. Stop Containers
-Bash
+### 4. Stop Containers
+```bash
 docker compose down
-📂 Repository Structure
-Bash
+```
+
+---
+
+## 📂 Repository Structure
+
+```bash
 aws-production-deployment/
 ├── .github/
 │   └── workflows/
@@ -169,30 +241,34 @@ aws-production-deployment/
 │       └── outputs.tf             # ALB DNS, RDS Endpoints, VPC IDs
 ├── docker-compose.yml             # Local multi-container orchestration
 └── README.md
-📜 Architectural Decision Records (ADRs)
+```
+
+---
+
+## 📜 Architectural Decision Records (ADRs)
+
 Key architectural and operational decisions are documented to maintain transparent engineering rationale:
 
-ADR 001: Initial Multi-Tier Architecture & Tech Stack Selection
+- 📑 **[ADR 001: Initial Multi-Tier Architecture & Tech Stack Selection](file:///c:/Free_lancing/Cloud%20Engineering%20Learning/aws-production-deployment/docs/decisions/001-project-architecture.md)**
+- 📑 **[ADR 002: Containerization Strategy with Docker Compose](file:///c:/Free_lancing/Cloud%20Engineering%20Learning/aws-production-deployment/docs/decisions/002-containerization.md)**
+- 📑 **[ADR 003: Multi-AZ Custom VPC Network Architecture](file:///c:/Free_lancing/Cloud%20Engineering%20Learning/aws-production-deployment/docs/decisions/003-vpc-network-architecture.md)**
 
-ADR 002: Containerization Strategy with Docker Compose
+---
 
-ADR 003: Multi-AZ Custom VPC Network Architecture
+## 📈 AWS Well-Architected Framework Alignment
 
-📈 AWS Well-Architected Framework Alignment
-Operational Excellence: Modular Infrastructure as Code (Terraform), centralized logging, automated GitOps CI/CD pipelines via GitHub Actions.
+- **Operational Excellence:** Modular Infrastructure as Code (Terraform), centralized logging, automated GitOps CI/CD pipelines via GitHub Actions.
+- **Security:** Layer-by-layer security group chaining, private database isolation, short-lived OIDC credentials, and encrypted parameters.
+- **Reliability:** Multi-AZ subnet distribution, stateless compute nodes, auto-healing EC2 fleet, and health check traffic rerouting.
+- **Performance Efficiency:** Optimized lightweight Alpine container images, connection pooling via Prisma, and scalable load balancing.
+- **Cost Optimization:** Rigorous zero-cost design avoiding NAT Gateway traps, right-sized Free-Tier compute (`t2.micro`/`t3.micro`) and single-AZ RDS during lab evaluation.
 
-Security: Layer-by-layer security group chaining, private database isolation, short-lived OIDC credentials, encrypted parameters.
+---
 
-Reliability: Multi-AZ subnet distribution, stateless compute nodes, auto-healing EC2 fleet, health check traffic rerouting.
+## 👤 Author
 
-Performance Efficiency: Optimized lightweight Alpine container images, connection pooling via Prisma, scalable load balancing.
+**Kithsara**  
+*Cloud & DevOps Engineer*
 
-Cost Optimization: Rigorous zero-cost design avoiding NAT Gateway traps, right-sized Free-Tier compute (t2.micro/t3.micro) and single-AZ RDS during lab evaluation.
-
-👤 Author
-Kithsara Cloud & DevOps Engineer
-
-🌐 GitHub: @dev-kithsara
-
-💼 LinkedIn: linkedin.com/in/kithsara-silva
-```
+- 🌐 **GitHub:** [@dev-kithsara](https://github.com/dev-kithsara)
+- 💼 **LinkedIn:** [linkedin.com/in/kithsara-silva](https://www.linkedin.com/in/kithsara-silva)
